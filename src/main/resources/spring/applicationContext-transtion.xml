@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 这里使用声明式事务控制 -->
+    <!-- spring事务控制类 -->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 在applicationContext-dao中已经声明这里可以直接用 -->
+        <property name="dataSource" ref="db"/>
+    </bean>
+    <!-- 通知 -->
+    <tx:advice id="advice">
+        <!-- 传播行为：哪些方法受事务管理 -->
+        <tx:attributes>
+            <!--
+            7种配置的意思:
+            REQUIRED: 支持当前事务，如果当前没有事务，就新建一个事务。
+            SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行。
+            MANDATORY： 支持当前事务，如果当前没有事务，就抛出异常
+            REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起
+            NOT_SUPPORTED: 以非事务方式执行操作，如果当前存在事务，就把当前事务挂起
+            NEVER: 以非事务方式执行，如果当前存在事务，则抛出异常
+            NESTED: 支持当前事务，如果当前事务存在，则执行一个嵌套事务，如果当前没有事务，就新建一个事务
+             -->
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="NOT_SUPPORTED" read-only="true"/>
+            <tx:method name="select*" propagation="NOT_SUPPORTED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <!-- advice-ref指定通知，pointcut切入点（拦截点） -->
+        <!--
+         1、execution(): 表达式主体。
+         2、第一个*号：表示返回类型，*号表示所有的类型。
+         3、包名：表示需要拦截的包名，后面的两个句点表示当前包和当前包的所有子包，com.sample.service.impl包、子孙包下所有类的方法。
+         4、第二个*号：表示类名，*号表示所有的类。
+         5、*(..):最后这个星号表示方法名，*号表示所有的方法，后面括弧里面表示方法的参数，两个句点表示任何参数。
+        -->
+        <!--                                             返回类型           包名  类名,方法(任意参数)   -->
+        <aop:advisor advice-ref="advice" pointcut="execution(* com.zys.service.impl.*.*(..))" />
+    </aop:config>
+</beans>

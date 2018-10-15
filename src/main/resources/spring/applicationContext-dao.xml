@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 导入数据配置 -->
+    <context:property-placeholder location="classpath:jdbc.properties" />
+    <bean id="db" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.pwd}"/>
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="driverClass" value="${jdbc.driver}"/>
+    </bean>
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="factory">
+        <!-- configLocation：mybatis的全局配置，经过测试整合spring后可以省略 -->
+        <!--<property name="configLocation" value=""/>-->
+        <property name="mapperLocations" value="classpath:com/zys/dao/*.xml"/>
+        <property name="dataSource" ref="db"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zys.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="factory"/>
+    </bean>
+    <!-- 扫描service，如果有异常则提出到单独的配置文件进行扫描 -->
+    <context:component-scan base-package="com.zys.service.impl"/>
+</beans>
