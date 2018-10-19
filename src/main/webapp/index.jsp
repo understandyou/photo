@@ -158,9 +158,27 @@
             $.ajax({
                 url:"/addLog.action",
                 type:"POST",
-                data:"{ name: }"
+                data:"{ name: ${requestScope.username}},first:yes",
+                success:function(result){
+
+                }
             });
-        })
+        });
+        setInterval(function(){
+            /* 记录5s */
+            $.ajax({
+                url:"/addLog.action",
+                type:"POST",
+                async:false,//关闭异步，方便调试
+                data:"{ name: ${requestScope.username}},first:no",
+                success:function(result){
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+
+        },5000);
         /* 检查是否支持某些属性 */
         var support_css3 = (function() {
 		 var div = document.createElement('div'),
