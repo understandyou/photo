@@ -154,6 +154,12 @@
             	$("body").html("<font color='red'>此浏览器不支持！请切换浏览器！</font>");
 
             }
+            /* 记录 */
+            $.ajax({
+                url:"/addLog.action",
+                type:"POST",
+                data:"{ name: }"
+            });
         })
         /* 检查是否支持某些属性 */
         var support_css3 = (function() {

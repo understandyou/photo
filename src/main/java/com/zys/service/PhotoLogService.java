@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PhotoLogService {
     int addPhotoLog(PhotoLog photoLog);
+    int addPhotoLogSelective(PhotoLog photoLog);
     List<PhotoLog> getAllPhotoLog();
 }
