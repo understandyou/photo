@@ -5,12 +5,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!-- 这里使用声明式事务控制 -->
     <!-- spring事务控制类 -->
-    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <bean id="dataManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!-- 在applicationContext-dao中已经声明这里可以直接用 -->
         <property name="dataSource" ref="db"/>
     </bean>
     <!-- 通知 -->
-    <tx:advice id="advice">
+    <tx:advice id="advice" transaction-manager="dataManager">
         <!-- 传播行为：哪些方法受事务管理 -->
         <tx:attributes>
             <!--

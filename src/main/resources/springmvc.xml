@@ -2,9 +2,30 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- 视图解析器 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"></bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 此类可以省略，因为前端控制器，默认加载的就是此类 -->
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 图片上传,必须加上id，并且名字为固定的名称不可变 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="resolveLazily" value="true"/>
+        <!-- 最大10M单位字节 -->
+        <property name="maxUploadSize" value="10485760000" />
+        <property name="maxInMemorySize" value="40960" />
+    </bean>
+    <!-- 1、自动注册defaultAnnotationHandlermapping ，AnnotationMethodhandlerAdapter，可以根据URL映射到方法-->
+    <!-- 2、数据绑定，数字和日期的format，如@NumberFormat ,@DateFormat,还有xml和json的默认读写功能 -->
+    <mvc:annotation-driven />
+    <!-- 1.加入对静态资源的处理 -->
+    <!-- 2.允许使用“/”做整体映射 -->
+    <mvc:default-servlet-handler/>
     <!-- 视图解析器只需要扫描controller即可，其余放到spring的主配置文件种扫描 -->
-    <context:component-scan base-package="com.zys.controller"/>
+    <context:component-scan base-package="com.zys.controller,com.zys.service.commonService"/>
 </beans>

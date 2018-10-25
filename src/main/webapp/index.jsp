@@ -155,28 +155,28 @@
 
             }
             /* 记录 */
-            $.ajax({
+       /*     $.ajax({
                 url:"/addLog.action",
                 type:"POST",
-                data:"{ name: ${requestScope.username}},first:yes",
+                data:"{ name: {requestScope.username}},first:yes",
                 success:function(result){
 
                 }
-            });
+            });*/
         });
         setInterval(function(){
             /* 记录5s */
-            $.ajax({
+       /*     $.ajax({
                 url:"/addLog.action",
                 type:"POST",
                 async:false,//关闭异步，方便调试
-                data:"{ name: ${requestScope.username}},first:no",
+                data:"{ name: {requestScope.username}},first:no",
                 success:function(result){
                 },
                 error:function(err){
                     console.log(err);
                 }
-            });
+            });*/
 
         },5000);
         /* 检查是否支持某些属性 */
@@ -202,6 +202,11 @@
 		})();
     </script>
 <body>
+<form action="${pageContext.request.contextPath}/addImages.action" enctype="multipart/form-data" method="post">
+    <input type="file" name="image" />
+    <input type="file" name="image" />
+    <input type="submit" value="提交" />
+</form>
 <div id="snowFlow" >
 	 <div class="mycontent">
         <ul>
