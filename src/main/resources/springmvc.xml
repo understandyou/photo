@@ -22,10 +22,62 @@
     </bean>
     <!-- 1、自动注册defaultAnnotationHandlermapping ，AnnotationMethodhandlerAdapter，可以根据URL映射到方法-->
     <!-- 2、数据绑定，数字和日期的format，如@NumberFormat ,@DateFormat,还有xml和json的默认读写功能 -->
-    <mvc:annotation-driven />
+    <mvc:annotation-driven>
+        <!--不使用默认消息转换器
+            使用阿里的fastjson转换器需要配置，如果使用的是jackson则不需要配置
+        -->
+        <mvc:message-converters register-defaults="false">
+            <!--spring消息转换器 -->
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+
+            <!--解决@Responcebody中文乱码问题 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8"/>
+            </bean>
+            <!--配合fastjson支持 -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="defaultCharset" value="UTF-8"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!--顺序保持这样,避免IE下载出错 -->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+                <property name="fastJsonConfig" ref="fastJsonConfig"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--fastJsonConfig -->
+    <bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
+        <!--默认编码格式 -->
+        <property name="charset" value="UTF-8"/>
+
+        <property name="serializerFeatures">
+            <list>
+                <value>WriteNullListAsEmpty</value>
+                <value>WriteDateUseDateFormat</value>
+                <value>PrettyFormat</value>
+                <value>WriteMapNullValue</value>
+                <value>WriteNullStringAsEmpty</value>
+                <value>WriteNullListAsEmpty</value>
+                <value>DisableCircularReferenceDetect</value>
+            </list>
+        </property>
+
+    </bean>
+    <!--fastjson支持配置结束 -->
+
     <!-- 1.加入对静态资源的处理 -->
     <!-- 2.允许使用“/”做整体映射 -->
     <mvc:default-servlet-handler/>
+    <!--
+    如果同时存在上面和下面两个处理静态资源的，会先加载mvc:resources
+    mapping：映射到ResourceHttpRequestHandler进行处理
+    location：指定静态资源的位置.可以是web application根目录下、jar包里，这样可以把静态资源压缩到jar包中
+    -->
+    <mvc:resources mapping="js/**" location="js/" />
     <!-- 视图解析器只需要扫描controller即可，其余放到spring的主配置文件种扫描 -->
     <context:component-scan base-package="com.zys.controller,com.zys.service.commonService"/>
 </beans>

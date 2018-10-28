@@ -8,6 +8,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service("imgService")
 public class ImgService {
@@ -45,8 +46,10 @@ public class ImgService {
         }
         //创建输入流
         InputStream input = file.getInputStream();
+        //使用uuid，的随机数生成基本上不重复的文件名称+文件后缀名-->组成新的文件达到修改文件名称的目的
+        String newFileName = UUID.randomUUID()+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
         //获得客服端文件的原始名称
-        String outPath = uploadPath + "imgs/" + file.getOriginalFilename();
+        String outPath = uploadPath + "imgs/" + newFileName;
         OutputStream output = new FileOutputStream(outPath);
         //缓冲区1m
         byte[] buffer = new byte[1024];

@@ -184,7 +184,7 @@
       </dependency>
 
 
-      <!-- 格式化对象，方便输出日志 -->
+      <!-- 格式化对象，转json -->
       <dependency>
           <groupId>com.alibaba</groupId>
           <artifactId>fastjson</artifactId>
