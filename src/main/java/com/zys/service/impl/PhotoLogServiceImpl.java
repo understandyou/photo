@@ -1,5 +1,6 @@
 package com.zys.service.impl;
 
+import com.zys.dao.LoginUserExtend;
 import com.zys.dao.LoginUserMapper;
 import com.zys.dao.PhotoLogMapper;
 import com.zys.entitys.PhotoLog;
@@ -14,7 +15,7 @@ public class PhotoLogServiceImpl implements PhotoLogService {
     @Autowired
     PhotoLogMapper photoLogMapper;
     @Autowired
-    LoginUserMapper loginUserMapper;
+    LoginUserExtend loginUserExtend;
 
     /**
      * 添加观看的日志不排空
@@ -54,6 +55,6 @@ public class PhotoLogServiceImpl implements PhotoLogService {
      */
     @Override
     public boolean CheckLoginName(String name) {
-        return loginUserMapper.selectByPrimaryKey(name) != null ? true : false;
+        return loginUserExtend.selectLoginName(name) != null ? true : false;
     }
 }
