@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 图片上传服务
+ */
 @Service("imgService")
 public class ImgService {
     //设置缩略图的宽度和高度

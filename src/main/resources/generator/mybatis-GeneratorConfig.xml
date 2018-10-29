@@ -14,7 +14,7 @@
         </commentGenerator>
 
         <!-- 数据库的相关配置 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.107./photo_record" userId="" password=""/>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://ecord" userId="" password=""/>
 
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>

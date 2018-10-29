@@ -4,6 +4,7 @@ import com.zys.entitys.PhotoLog;
 import com.zys.service.PhotoLogService;
 import com.zys.service.commonService.ImgService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,4 +71,17 @@ public class PhotoLogController {
         return result;
     }
 
+    /**
+     * 检查是否存在用户
+     *
+     * @param loginName
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/checkNameAutoority.action", method = RequestMethod.POST)
+    public String checkNameAuthority(String loginName) {
+        //检查用户是否存在
+        boolean isExists = photoLogService.CheckLoginName(loginName);
+        return isExists ? "{'exists':'true'}" : "{'exists':'false'}";
+    }
 }

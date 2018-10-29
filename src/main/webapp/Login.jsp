@@ -61,9 +61,22 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                layer.msg(JSON.stringify(data.field));
-                //Ajax请求，检查是否有此用户数据
-                imageUpload();
+                //layer.msg(JSON.stringify(data.field));
+                //imageUpload();
+                $.ajax({
+                    url: "/checkNameAutoority.action",
+                    method: "POST",
+                    //contentType:"application/json",//默认键值对，上传
+                    dataType: "json",
+                    data: "loginName=" + data.field.title,//键值对
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+                //console.log(data.field);
                 return false;
             });
         });
