@@ -1,8 +1,11 @@
 package com.zys.service.impl;
 
+
+import com.zys.dao.ImageInfoMapper;
 import com.zys.dao.LoginUserExtend;
 import com.zys.dao.LoginUserMapper;
 import com.zys.dao.PhotoLogMapper;
+import com.zys.entitys.ImageInfo;
 import com.zys.entitys.PhotoLog;
 import com.zys.service.PhotoLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,10 @@ public class PhotoLogServiceImpl implements PhotoLogService {
     PhotoLogMapper photoLogMapper;
     @Autowired
     LoginUserExtend loginUserExtend;
-
+    @Autowired
+    ImageInfoMapper imageInfoMapper;
+//    @Autowired
+//    LoginUserMapper loginUserMapper;
     /**
      * 添加观看的日志不排空
      *
@@ -56,5 +62,17 @@ public class PhotoLogServiceImpl implements PhotoLogService {
     @Override
     public boolean CheckLoginName(String name) {
         return loginUserExtend.selectLoginName(name) != null ? true : false;
+        //return loginUserMapper.selectByPrimaryKey(1) != null ? true : false;
+    }
+
+    /**
+     * 根据名称查询图片ulr
+     *
+     * @param name
+     * @return
+     */
+    @Override
+    public List<ImageInfo> searchName(String name) {
+        return imageInfoMapper.searchName(name);
     }
 }

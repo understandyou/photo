@@ -1,5 +1,6 @@
 package com.zys.controller;
 
+import com.zys.entitys.ImageInfo;
 import com.zys.entitys.PhotoLog;
 import com.zys.service.PhotoLogService;
 import com.zys.service.commonService.ImgService;
@@ -16,12 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class PhotoLogController {
+    /**
+     * 所有操作类服务
+     */
     @Autowired
     PhotoLogService photoLogService;
+    /**
+     * 图片上传服务
+     */
     @Autowired
     ImgService imgService;
 
@@ -79,9 +87,17 @@ public class PhotoLogController {
      */
     @ResponseBody
     @RequestMapping(value = "/checkNameAutoority.action", method = RequestMethod.POST)
-    public String checkNameAuthority(String loginName) {
+    public Map<String, Object> checkNameAuthority(String loginName) {
+        Map<String, Object> map = new HashMap<>();
         //检查用户是否存在
         boolean isExists = photoLogService.CheckLoginName(loginName);
-        return isExists ? "{'exists':'true'}" : "{'exists':'false'}";
+        if (isExists) {
+            //检查是否存在照片
+            List<ImageInfo> imageInfos = photoLogService.searchName("a");
+            map.put("imageExists", imageInfos.size() > 0 ? "true" : "false");
+
+        }
+        map.put("userExists", isExists ? "true" : "false");
+        return map;
     }
 }

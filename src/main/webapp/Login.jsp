@@ -63,6 +63,7 @@
             form.on('submit(formDemo)', function(data){
                 //layer.msg(JSON.stringify(data.field));
                 //imageUpload();
+                layer.msg("玩命检索中...");
                 $.ajax({
                     url: "/checkNameAutoority.action",
                     method: "POST",
@@ -70,10 +71,16 @@
                     dataType: "json",
                     data: "loginName=" + data.field.title,//键值对
                     success: function (data) {
-                        console.log(data);
-                    },
-                    error: function (err) {
-                        console.log(err);
+                        console.log("--->" + data.imageExists);
+                        if (data.imageExists == "false" && data.userExists == "true") {
+                            //有用户权限，但是没有图片，显示上传
+                            imageUpload();
+                        } else if (data.imageExists == "true" && data.userExists == "true") {
+                            console.log("提交");
+                        }
+                    }
+                    , error: function (err) {
+                        layer.msg("检索失败请重试...");
                     }
                 });
                 //console.log(data.field);

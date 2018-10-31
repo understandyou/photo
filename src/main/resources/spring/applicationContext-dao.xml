@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 导入数据配置 -->
     <context:property-placeholder location="classpath:jdbc.properties" />
-    <bean id="db" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <bean id="db" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="user" value="${jdbc.name}"/>
         <property name="password" value="${jdbc.pwd}"/>
         <property name="jdbcUrl" value="${jdbc.url}" />
@@ -13,7 +13,7 @@
     </bean>
     <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="factory">
         <!-- configLocation：mybatis的全局配置，经过测试整合spring后可以省略 -->
-        <!--<property name="configLocation" value=""/>-->
+        <!--<property name="configLocation" value="classpath:/mybatis/configuration.xml"/>-->
         <property name="mapperLocations" value="classpath:com/zys/dao/*.xml"/>
         <property name="dataSource" ref="db"/>
     </bean>
