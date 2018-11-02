@@ -5,20 +5,18 @@ import com.zys.entitys.PhotoLog;
 import com.zys.service.PhotoLogService;
 import com.zys.service.commonService.ImgService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class PhotoLogController {
@@ -81,23 +79,49 @@ public class PhotoLogController {
 
     /**
      * 检查是否存在用户
-     *
+     * 由于Ajax检查，所以在session放入传到客户端的key,回传回来在做对比
      * @param loginName
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/checkNameAutoority.action", method = RequestMethod.POST)
-    public Map<String, Object> checkNameAuthority(String loginName) {
+    public Map<String, Object> checkNameAuthority(String loginName, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         //检查用户是否存在
         boolean isExists = photoLogService.CheckLoginName(loginName);
         if (isExists) {
             //检查是否存在照片
-            List<ImageInfo> imageInfos = photoLogService.searchName("a");
+            List<ImageInfo> imageInfos = photoLogService.searchName(loginName);
             map.put("imageExists", imageInfos.size() > 0 ? "true" : "false");
-
+            Random random = new Random();
+            String key = UUID.randomUUID().toString() + random.nextInt();
+            //回发到客户端的key
+            map.put("userKey", key);
+            //将验证客户端的key放入sessio中
+            session.setAttribute("userKey", key);
         }
-        map.put("userExists", isExists ? "true" : "false");
+        map.put("userExists", isExists ? true : false);
         return map;
     }
+
+    /**
+     * 显示主页
+     *
+     * @return
+     */
+    @RequestMapping("/showPhoto.action")
+    public ModelAndView showPhoto(HttpSession session, String userKey) {
+        ModelAndView modelAndView = new ModelAndView("index");
+        if (session.getAttribute("userKey") != null) {
+            boolean isok = session.getAttribute("userKey").equals(userKey);
+            if (isok) {
+                //验证是否通过
+                modelAndView.addObject("verify", true);
+                return modelAndView;
+            }
+        }
+        modelAndView.addObject("verify", false);
+        return modelAndView;
+    }
+
 }

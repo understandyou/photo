@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${sessionScope.userKey}==false">
+    <%-- 重定向到登陆页面 --%>
+    <c:redirect url="Login.jsp"/>
+</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -202,11 +207,6 @@
 		})();
     </script>
 <body>
-<form action="${pageContext.request.contextPath}/addImages.action" enctype="multipart/form-data" method="post">
-    <input type="file" name="image" />
-    <input type="file" name="image" />
-    <input type="submit" value="提交" />
-</form>
 <div id="snowFlow" >
 	 <div class="mycontent">
         <ul>
@@ -217,6 +217,6 @@
             <li dushu="150"></li>
         </ul>
     </div>
-</div> 
+</div>
 </body>
 </html>
