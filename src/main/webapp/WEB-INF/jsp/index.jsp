@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:if test="${sessionScope.userKey}==false">
-    <%-- 重定向到登陆页面 --%>
-    <c:redirect url="Login.jsp"/>
-</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +10,7 @@
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="js/xuehua.js"></script>
+  <script src="../../js/xuehua.js"></script>
    <style>
         *{
             margin: 0;
@@ -30,7 +26,7 @@
             /*perspective: 1000px;
             -webkit-perspective: 1000px;  Safari 和 Chrome */
             overflow:hidden;
-         } 
+         }
     /* 小屏幕（平板，大于等于 768px） */
     @media (min-width: 768px) { 
         .mycontent{
@@ -210,11 +206,16 @@
 <div id="snowFlow" >
 	 <div class="mycontent">
         <ul>
-            <li dushu="80"></li>
-            <li dushu="100"></li>
-            <li dushu="120"></li>
-            <li dushu="130"></li>
-            <li dushu="150"></li>
+            <c:forEach var="image" varStatus="sta" items="${sessionScope.images}">
+                <c:choose>
+                    <c:when test="${sessionScope.images.size()>5}">
+                        <li dushu="${sta.index+171 }"></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li dushu="${sta.index*20+80}"></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
         </ul>
     </div>
 </div>

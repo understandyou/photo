@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -29,13 +28,16 @@
     </style>
 </head>
 <body>
-
+<input type="hidden" id="userKeyBuffer" />
+<input type="hidden" id="userIdBuffer" />
     <div id="userLogin">
-        <form class="layui-form" action="">
+        <form class="layui-form" action="/showPhoto.action" method="post">
             <div class="layui-form-item">
                 <label class="layui-form-label">您的姓名！</label>
                 <div class="layui-input-block">
                     <input type="text" name="title" required  lay-verify="required" placeholder="您的姓名" autocomplete="off" class="layui-input">
+                    <input type="hidden" name="userKey" id="userKey" />
+                    <input type="hidden" name="userId" id="userId" />
                 </div>
             </div>
  <%--           <div class="layui-form-item">
@@ -61,6 +63,7 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
+                var isSubmit = false;
                 //layer.msg(JSON.stringify(data.field));
                 //imageUpload();
                 layer.msg("玩命检索中...");
@@ -69,22 +72,36 @@
                     method: "POST",
                     //contentType:"application/json",//默认键值对，上传
                     dataType: "json",
+                    async:false,
                     data: "loginName=" + data.field.title,//键值对
-                    success: function (data) {
-                        console.log("--->" + data.imageExists);
-                        if (data.imageExists == "false" && data.userExists == "true") {
+                    success: function (resultData) {
+                        if (resultData.imageExists == false && resultData.userExists == true) {
+                            layer.msg("系统查询没有您的相册请上传...");
+                            console.log("权限ok");
+                            //缓存,上传图片的权限
+                            $("#userKeyBuffer").val(resultData.userKey);
+                            $("#userIdBuffer").val(resultData.userId);
                             //有用户权限，但是没有图片，显示上传
                             imageUpload();
-                        } else if (data.imageExists == "true" && data.userExists == "true") {
-                            console.log("提交");
+                        } else if (resultData.imageExists == true && resultData.userExists == true) {
+                            $("#userKey").val(resultData.userKey);
+                            //缓存
+                            $("#userKeyBuffer").val(resultData.userKey);
+                            $("#userIdBuffer").val(resultData.userId);
+                            $("#userId").val(resultData.userId);
+                            console.log("权限和图片都ok");
+                            isSubmit = true;
+                            //form.render();
+                        }
+                        else{
+                            layer.msg("对不起！您无权进入查看...");
                         }
                     }
                     , error: function (err) {
                         layer.msg("检索失败请重试...");
                     }
                 });
-                //console.log(data.field);
-                return false;
+                return isSubmit;
             });
         });
         //判断是否存在图片，如果不存在则显示上传框
@@ -100,12 +117,21 @@
             //图片上传
             layui.use('upload', function(){
                 var upload = layui.upload;
-
+                $("#uploadUserKey").val($("#userKeyBuffer").val());
                 //执行实例
                 var uploadInst = upload.render({
                     elem: '#test1' //绑定元素
-                    ,url: '/addImages.action/' //上传接口
+                    ,url: '/addImages.action' //上传接口
                     ,multiple: true//多选
+                    ,data:{
+                        "userKey":$("#userKeyBuffer").val(),
+                        "userId":$("#userIdBuffer").val()
+                    }
+                    ,number:10
+                    // ,before:function () {
+                    //     var addHtml = "<input type='hidden' value='"+$("#userKeyBuffer").val()+"' name='userKey' id='uploadUserKey' />";
+                    //     $("#test1").parent().append(addHtml);
+                    // }
                     ,done: function(res){
                         layer.msg('玩命提示中');
                         //上传完毕回调

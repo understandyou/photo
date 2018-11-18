@@ -6,6 +6,7 @@ import com.zys.dao.LoginUserExtend;
 import com.zys.dao.LoginUserMapper;
 import com.zys.dao.PhotoLogMapper;
 import com.zys.entitys.ImageInfo;
+import com.zys.entitys.LoginUser;
 import com.zys.entitys.PhotoLog;
 import com.zys.service.PhotoLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class PhotoLogServiceImpl implements PhotoLogService {
      * @return
      */
     @Override
-    public boolean CheckLoginName(String name) {
-        return loginUserExtend.selectLoginName(name) != null ? true : false;
+    public LoginUser CheckLoginName(String name) {
+        return loginUserExtend.selectLoginName(name);
         //return loginUserMapper.selectByPrimaryKey(1) != null ? true : false;
     }
 

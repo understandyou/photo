@@ -266,6 +266,9 @@
           </plugin>
       </plugins>
       <!-- 要在plugins下，否则有异常 -->
+      <!-- 将java下的xml文件一起打包到运行目录的class目录中
+            例如：mapper的xml
+       -->
       <resources>
           <resource>
               <directory>src/main/java</directory>

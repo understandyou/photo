@@ -61,4 +61,11 @@ public interface ImageInfoMapper {
      * @return
      */
     List<ImageInfo> searchName(String name);
+
+    /**
+     * 根据用户id查询对于的图片url
+     * @param UserId
+     * @return
+     */
+    List<ImageInfo> searchUrlToId(Integer UserId);
 }

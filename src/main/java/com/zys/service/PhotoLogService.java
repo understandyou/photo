@@ -2,6 +2,7 @@ package com.zys.service;
 
 
 import com.zys.entitys.ImageInfo;
+import com.zys.entitys.LoginUser;
 import com.zys.entitys.PhotoLog;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface PhotoLogService {
     int addPhotoLogSelective(PhotoLog photoLog);
     List<PhotoLog> getAllPhotoLog();
 
-    boolean CheckLoginName(String name);
+    LoginUser CheckLoginName(String name);
 
     /**
      * 根据名称查询图片ulr

@@ -62,7 +62,7 @@ public class ImgService {
         output.close();
         input.close();
         //返回相对路径
-        return "imgs/" + file.getOriginalFilename();
+        return "imgs/" + newFileName;
 
     }
 
