@@ -94,21 +94,26 @@
             transition:all 1s;
             background-repeat:no-repeat;
         }
-		ul li:nth-child(5){
-			background-image: url("imgs/psb1.jpg");
-		}
-		ul li:nth-child(4){
-			background-image: url("imgs/psb2.jpg");
-		}
-		ul li:nth-child(3){
-			background-image: url("imgs/psb3.jpg");
-		}
-		ul li:nth-child(2){
-			background-image: url("imgs/psb4.jpg");
-		}
-		ul li:nth-child(1){
-			background-image: url("imgs/psb5.jpg");
-		}
+        <c:forEach var="image" varStatus="sta" items="${requestScope.images}">
+            ul li:nth-child(${sta.count}){
+                background-image: url("${image.imgUrl}");
+            }
+        </c:forEach>
+		/*ul li:nth-child(5){*/
+			/*background-image: url("imgs/psb1.jpg");*/
+		/*}*/
+		/*ul li:nth-child(4){*/
+			/*background-image: url("imgs/psb2.jpg");*/
+		/*}*/
+		/*ul li:nth-child(3){*/
+			/*background-image: url("imgs/psb3.jpg");*/
+		/*}*/
+		/*ul li:nth-child(2){*/
+			/*background-image: url("imgs/psb4.jpg");*/
+		/*}*/
+		/*ul li:nth-child(1){*/
+			/*background-image: url("imgs/psb5.jpg");*/
+		/*}*/
 		
     </style>
     <script>
@@ -206,9 +211,9 @@
 <div id="snowFlow" >
 	 <div class="mycontent">
         <ul>
-            <c:forEach var="image" varStatus="sta" items="${sessionScope.images}">
+            <c:forEach var="image" varStatus="sta" items="${requestScope.images}">
                 <c:choose>
-                    <c:when test="${sessionScope.images.size()>5}">
+                    <c:when test="${requestScope.images.size()>5}">
                         <li dushu="${sta.index+171 }"></li>
                     </c:when>
                     <c:otherwise>

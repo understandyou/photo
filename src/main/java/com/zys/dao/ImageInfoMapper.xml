@@ -121,6 +121,6 @@
   WHERE i.`login_id` IN(SELECT id FROM login_user where `name` = #{ name })
   </select>
   <select id="searchUrlToId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select * from mage_info i WHERE i.`login_id`=#{ userId}
+    select * from image_info i WHERE i.`login_id`=#{ userId}
   </select>
 </mapper>

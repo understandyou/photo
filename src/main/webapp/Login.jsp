@@ -133,7 +133,6 @@
                     //     $("#test1").parent().append(addHtml);
                     // }
                     ,done: function(res){
-                        layer.msg('玩命提示中');
                         //上传完毕回调
                         if(res.result=="ok"){
                             //上传ok给出提示

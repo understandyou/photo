@@ -24,6 +24,7 @@ public class LoginCeptor implements HandlerInterceptor {
 //        if(request.getRequestURI().indexOf("")>=0){
 //            return true;
 //        }
+        System.out.println("---");
         //回发回来的key和session中的key对比，一致则ok
         if(request.getParameter("userKey")!=null && request.getParameter("userKey").equals(session.getAttribute("userKey"))){
            return true;
