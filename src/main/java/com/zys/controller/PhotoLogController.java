@@ -8,16 +8,14 @@ import com.zys.service.PhotoLogService;
 import com.zys.service.commonService.ImgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Controller
@@ -37,19 +35,28 @@ public class PhotoLogController {
     ImageInfoService imageInfoService;
 
     @RequestMapping(value = "/addLog.action",method = RequestMethod.POST )
-    public void addLog(PhotoLog photoLog, @RequestParam(required = true) String first){
+    public void addLog(PhotoLog photoLog, String userKey, String first, HttpSession session){//@RequestParam(required = true)
+        Integer addKeyId = null;
+        //key相同说明是同一次登陆则为同一次会话
+        boolean isok = session.getAttribute("userKey").equals(userKey);
         if(first.equals(("yes"))){
-            photoLog.setStartDate(new Date());
+            photoLog.setStartDate(new Timestamp(new Date().getTime()));
             //sql文中会自动排除空值
-            photoLogService.addPhotoLogSelective(photoLog);
+            addKeyId = photoLogService.addPhotoLogSelective(photoLog);
+            session.setAttribute("addKeyId",addKeyId);
         }else
         {
-            photoLog.setRemain(new Date());
-            //sql文中会自动排除空值
-            photoLogService.addPhotoLogSelective(photoLog);
+            addKeyId = (Integer) session.getAttribute("addKeyId");
+            if (addKeyId!=null) {
+                photoLog.setId(addKeyId);
+                photoLog.setEntDate(new Timestamp(new Date().getTime()));
+                //sql文中会自动排除空值
+                //photoLogService.addPhotoLogSelective(photoLog);
+                //根据id更新结束时间
+                photoLogService.updateEndTimeByUserId(photoLog);
+            }
         }
     }
-
     /**
      * 上传图片
      * @param
@@ -58,24 +65,27 @@ public class PhotoLogController {
      */
     @ResponseBody
     @RequestMapping(value = "/addImages.action",method = RequestMethod.POST)
-    public Map<String,Object> addImages(@RequestParam(value = "file") CommonsMultipartFile[] image, HttpServletRequest request){
+    public Map<String,Object> addImages(@RequestParam(value = "file") CommonsMultipartFile image, HttpServletRequest request){
         Map<String,Object> result = new HashMap<>();
         try {
             Integer userId = Integer.valueOf(request.getParameter("userId"));
+            if(imageInfoService.getLoginIdByCount(userId)>=20){
+                result.put("result","exceed");
+                return result;
+            }
 
             //根据相对路径获得绝对路径
             String url =  request.getServletContext().getRealPath("/");
-            for (int i=0;i<image.length;i++) {
                 //可以讲上传的CommonsMultipartFile文件对方复制一份到file中,根据demo看会自动写到磁盘中，未测试
 //                image[i].transferTo(file);
                     //获取上传后原图的相对地址
-                String realUploadPath = imgService.uploadImg(image[i], request.getServletContext().getRealPath("/"));
+                String realUploadPath = imgService.uploadImg(image, request.getServletContext().getRealPath("/"));
                 ImageInfo imageInfo = new ImageInfo();
                 imageInfo.setLoginId(userId);
                 imageInfo.setImgUrl(realUploadPath);
                 //将绝对路径保存到数据库
                 int imageSave = imageInfoService.addImageInfo(imageInfo);
-            }
+
             //获取生成的缩略图的相对地址
             //String thumbImageUrl = imgService.imageController(image, realUploadPath);
             result.put("result", "ok");
@@ -130,6 +140,8 @@ public class PhotoLogController {
                 //查询用户的图片
                 List<ImageInfo> images = imageInfoService.searchIdToUrl(userId);
                 modelAndView.addObject("images", images);
+                modelAndView.addObject("userId", userId);
+                modelAndView.addObject("userKey", userKey);
                 modelAndView.addObject("verify", true);
                 return modelAndView;
             }

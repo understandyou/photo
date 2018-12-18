@@ -84,10 +84,11 @@
                             //有用户权限，但是没有图片，显示上传
                             imageUpload();
                         } else if (resultData.imageExists == true && resultData.userExists == true) {
-                            $("#userKey").val(resultData.userKey);
                             //缓存
                             $("#userKeyBuffer").val(resultData.userKey);
                             $("#userIdBuffer").val(resultData.userId);
+                            //设置用于验证
+                            $("#userKey").val(resultData.userKey);
                             $("#userId").val(resultData.userId);
                             console.log("权限和图片都ok");
                             isSubmit = true;
@@ -136,8 +137,17 @@
                         //上传完毕回调
                         if(res.result=="ok"){
                             //上传ok给出提示
-                            msg("上传成功！");
-                        }else
+                            msg("上传成功！手机端多张图片请分次上传！");
+                            if($("#imgtz").val()==undefined){
+                                $("#userLogin").append("<button id='imgtz' onclick='showHome()' class='layui-btn'>上传完成，跳转主页</button>");
+                            }
+                        }else if(res.result="exceed"){
+                            msg("上传图片超过限制，最大20张！");
+                            if($("#imgtz").val()==undefined){
+                                $("#userLogin").append("<button id='imgtz' onclick='showHome()' class='layui-btn'>上传完成，跳转主页</button>");
+                            }
+                        }
+                        else
                         {
                             msg("上传失败！");
                         }
@@ -160,6 +170,23 @@
                     //console.log("====>");
                 }
             });
+        }
+        function showHome(){
+            console.log("进入");
+            //动态创建form，并且提交
+            var decForm = $("<form></form>");
+            decForm.prop("action","/showPhoto.action");
+            decForm.prop("method","post");
+            var parVal = $("<input type='text' name='userKey' />");
+            var parVal2 = $("<input type='text' name='userId' />");
+            parVal.prop("value",$("#userKeyBuffer").val());
+            parVal2.prop("value",$("#userIdBuffer").val());
+            decForm.append(parVal);
+            decForm.append(parVal2);
+            decForm.appendTo("body");
+            decForm.css("display","none");
+            decForm.submit();
+            return false;
         }
     </script>
 </body>

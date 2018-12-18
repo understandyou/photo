@@ -24,10 +24,17 @@ public class LoginCeptor implements HandlerInterceptor {
 //        if(request.getRequestURI().indexOf("")>=0){
 //            return true;
 //        }
-        System.out.println("---");
+
         //回发回来的key和session中的key对比，一致则ok
         if(request.getParameter("userKey")!=null && request.getParameter("userKey").equals(session.getAttribute("userKey"))){
+            System.out.println("-1--");
            return true;
+        }
+        //请求不被允许则检查是否为主页，直接跳转到登陆页
+        if(request.getRequestURI().indexOf("showPhoto")>=0){
+            //说明拦截主页请求，跳转登陆
+            request.getRequestDispatcher("/Login.jsp").forward(request,httpServletResponse);
+            return true;
         }
         return false;
     }

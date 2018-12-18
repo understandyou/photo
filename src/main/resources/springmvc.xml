@@ -26,7 +26,10 @@
             <mvc:mapping path="/**"/>
             <!-- 不拦截的部分 两个*表示子目录和子孙目录 -->
             <mvc:exclude-mapping path="/js/**" />
+            <mvc:exclude-mapping path="/css/**" />
+            <mvc:exclude-mapping path="/imgs/**" />
             <mvc:exclude-mapping path="/checkNameAutoority.action" />
+            <!--<mvc:exclude-mapping path="/addLog*.action" />-->
             <mvc:exclude-mapping path="/addImages.action" />
             <bean class="com.zys.interceptor.LoginCeptor"></bean>
         </mvc:interceptor>

@@ -1,10 +1,7 @@
 package com.zys.service.impl;
 
 
-import com.zys.dao.ImageInfoMapper;
-import com.zys.dao.LoginUserExtend;
-import com.zys.dao.LoginUserMapper;
-import com.zys.dao.PhotoLogMapper;
+import com.zys.dao.*;
 import com.zys.entitys.ImageInfo;
 import com.zys.entitys.LoginUser;
 import com.zys.entitys.PhotoLog;
@@ -17,7 +14,7 @@ import java.util.List;
 @Service("photoLogService")
 public class PhotoLogServiceImpl implements PhotoLogService {
     @Autowired
-    PhotoLogMapper photoLogMapper;
+    PhotoLogExtend photoLogMapper;
     @Autowired
     LoginUserExtend loginUserExtend;
     @Autowired
@@ -38,11 +35,14 @@ public class PhotoLogServiceImpl implements PhotoLogService {
     /**
      * 添加观看的日志排除空值
      * @param photoLog
-     * @return
+     * @return 添加后的主键id
      */
     @Override
-    public int addPhotoLogSelective(PhotoLog photoLog) {
-        return photoLogMapper.insertSelective(photoLog);
+    public Integer addPhotoLogSelective(PhotoLog photoLog) {
+        System.out.println("添加"+photoLog.getId());
+        int isrows =  photoLogMapper.insertSelective(photoLog);
+        System.out.println("添加完成"+photoLog.getId());
+        return photoLog.getId();
     }
 
     /**
@@ -75,5 +75,20 @@ public class PhotoLogServiceImpl implements PhotoLogService {
     @Override
     public List<ImageInfo> searchName(String name) {
         return imageInfoMapper.searchName(name);
+    }
+
+    /**
+     * 根据用户id跟新结束时间
+     * @return
+     */
+    @Override
+    public int updateEndTimeByUserId(PhotoLog photoLog){
+        if(photoLog==null){
+            return 0;
+        }else
+        {
+            //根据用户id更新结束时间
+            return photoLogMapper.updateEndTimeByUserId(photoLog);
+        }
     }
 }

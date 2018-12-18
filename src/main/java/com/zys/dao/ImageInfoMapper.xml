@@ -123,4 +123,7 @@
   <select id="searchUrlToId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select * from image_info i WHERE i.`login_id`=#{ userId}
   </select>
+  <select id="getLoginIdByCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT COUNT(1) FROM `image_info` WHERE login_id=#{loginId}
+  </select>
 </mapper>

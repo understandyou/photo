@@ -3,7 +3,10 @@ package com.zys.dao;
 import com.zys.entitys.ImageInfo;
 import com.zys.entitys.ImageInfoKey;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import java.util.List;
+
 
 public interface ImageInfoMapper {
     /**
@@ -68,4 +71,11 @@ public interface ImageInfoMapper {
      * @return
      */
     List<ImageInfo> searchUrlToId(Integer UserId);
+
+    /**
+     * 获得当前用户下的图片数
+     * @param userId
+     * @return
+     */
+    Integer getLoginIdByCount(Integer userId);
 }

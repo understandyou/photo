@@ -6,27 +6,27 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>相册</title>
+    <link rel="stylesheet" href="/css/xuehua.css" type="text/css">
 </head>
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="../../js/xuehua.js"></script>
    <style>
-        *{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        html,body{
-            width: 100%;
-            height: 100%;
-            background-color: black;
-        }
-         body{
-            /*perspective: 1000px;
-            -webkit-perspective: 1000px;  Safari 和 Chrome */
-            overflow:hidden;
-         }
+       html,body{
+           width:100%;
+           height: 100%;
+       }
+       ul li{
+           /* 去掉li的小黑点 */
+           list-style:none;
+       }
+       body {
+           background-image: url("/imgs/background.jpg");
+           background-repeat:no-repeat;
+           background-size: 100% 100%;
+           overflow: hidden;
+       }
     /* 小屏幕（平板，大于等于 768px） */
     @media (min-width: 768px) { 
         .mycontent{
@@ -86,47 +86,39 @@
             transform: rotateX(70deg);
         } */
         ul li{
-            background-color:black;
+            /*background-color:black;*/
             position:absolute;
             top: 0;
             left:0;
             transform-origin: left bottom;
             transition:all 1s;
-            background-repeat:no-repeat;
+            /*background-repeat:no-repeat;*/
         }
         <c:forEach var="image" varStatus="sta" items="${requestScope.images}">
             ul li:nth-child(${sta.count}){
                 background-image: url("${image.imgUrl}");
             }
         </c:forEach>
-		/*ul li:nth-child(5){*/
-			/*background-image: url("imgs/psb1.jpg");*/
-		/*}*/
-		/*ul li:nth-child(4){*/
-			/*background-image: url("imgs/psb2.jpg");*/
-		/*}*/
-		/*ul li:nth-child(3){*/
-			/*background-image: url("imgs/psb3.jpg");*/
-		/*}*/
-		/*ul li:nth-child(2){*/
-			/*background-image: url("imgs/psb4.jpg");*/
-		/*}*/
-		/*ul li:nth-child(1){*/
-			/*background-image: url("imgs/psb5.jpg");*/
-		/*}*/
-		
+
+    @keyframes mysnow {
+        0% { bottom: 100%; opacity: 0; }
+        50% { opacity: 1; transform: rotate(720deg);}
+        100% { transform: rotate(0deg); opacity: 0; bottom: 0%;}
+    }
+    .container { position: fixed; }
+    .pic {
+        position: absolute;
+        opacity: 0;
+        animation: mysnow 5s;
+        height: 30px;
+    }
     </style>
     <script>
-    fn.snow({
-        minSize: 5,
-        maxSize: 30,
-        newOn: 100,
-        flakeSpeed: 5
-    });
         var clickSum = 0;
         var isok = false;
         $(function(){
             $(".mycontent:nth-child(1)").click(function(){
+                //alert("aaa");
                 if(!isok){
                     $("ul").css({
                         //"-webkit-perspective": "1000px",
@@ -143,7 +135,7 @@
                 if(!isok)return;
                 var ds = $(this).attr("dushu");
                 console.log("--"+ds);
-                if(ds == 80){
+                if(ds == 80 || ds==161){
                     $("ul,ul li").css({"transform":"none"});
                     isok = false;
                     return false;
@@ -161,30 +153,36 @@
 
             }
             /* 记录 */
-       /*     $.ajax({
-                url:"/addLog.action",
-                type:"POST",
-                data:"{ name: {requestScope.username}},first:yes",
-                success:function(result){
+       <%-- 进入的时间 --%>
+            <%--$.ajax({--%>
+                <%--url:"/addLog.action",--%>
+                <%--method:"POST",--%>
+                <%--//contentType:"application/json; charset=utf-8",--%>
+                <%--data:{ "loginId": "${requestScope.userId}","first":"yes","userKey":"${requestScope.userKey}"}--%>
 
-                }
-            });*/
+            <%--});--%>
+            setInterval(function(){
+                var left=Math.random()*window.innerWidth;
+                var height=Math.random()*window.innerHeight;
+                var src = '/imgs/snow.png';
+                snowFlow(left,height,src);
+            },100);
         });
-        setInterval(function(){
-            /* 记录5s */
-       /*     $.ajax({
-                url:"/addLog.action",
-                type:"POST",
-                async:false,//关闭异步，方便调试
-                data:"{ name: {requestScope.username}},first:no",
-                success:function(result){
-                },
-                error:function(err){
-                    console.log(err);
-                }
-            });*/
+        <%--setInterval(function(){--%>
+            <%--/* 记录5s */--%>
+            <%--$.ajax({--%>
+                <%--url:"/addLog.action",--%>
+                <%--type:"POST",--%>
+                <%--async:false,//关闭异步，方便调试--%>
+                <%--data:{ "loginId": "${requestScope.userId}","first":"no","userKey":"${requestScope.userKey}"},--%>
+                <%--success:function(result){--%>
+                <%--},--%>
+                <%--error:function(err){--%>
+                    <%--console.log(err);--%>
+                <%--}--%>
+            <%--});--%>
 
-        },5000);
+        <%--},5000);--%>
         /* 检查是否支持某些属性 */
         var support_css3 = (function() {
 		 var div = document.createElement('div'),
@@ -209,12 +207,15 @@
     </script>
 <body>
 <div id="snowFlow" >
-	 <div class="mycontent">
+
+</div>
+<div>
+    <div class="mycontent">
         <ul>
             <c:forEach var="image" varStatus="sta" items="${requestScope.images}">
                 <c:choose>
                     <c:when test="${requestScope.images.size()>5}">
-                        <li dushu="${sta.index+171 }"></li>
+                        <li dushu="${sta.index+161 }"></li>
                     </c:when>
                     <c:otherwise>
                         <li dushu="${sta.index*20+80}"></li>

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PhotoLogService {
     int addPhotoLog(PhotoLog photoLog);
-    int addPhotoLogSelective(PhotoLog photoLog);
+    Integer addPhotoLogSelective(PhotoLog photoLog);
     List<PhotoLog> getAllPhotoLog();
 
     LoginUser CheckLoginName(String name);
@@ -17,8 +17,9 @@ public interface PhotoLogService {
     /**
      * 根据名称查询图片ulr
      *
-     * @param name
      * @return
      */
     List<ImageInfo> searchName(String name);
+
+    int updateEndTimeByUserId(PhotoLog photoLog);
 }
