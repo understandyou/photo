@@ -43,26 +43,45 @@ public class ImgService {
      * 上传图片
      */
     public String uploadImg(CommonsMultipartFile file, String uploadPath) throws IOException {
-        File upload = new File(uploadPath + "/imgs");
-        if (!upload.exists()) {
-            upload.mkdirs();
+        FileOutputStream fout = null;
+        String newFileName = "";
+        try {
+            fout = new FileOutputStream("/usr/myFile/log.txt", true);
+            fout.write("------1---------".getBytes());
+
+            File upload = new File(uploadPath);
+            if (!upload.exists()) {
+                upload.mkdirs();
+            }
+            fout.write("------2---------".getBytes());
+            //创建输入流
+            InputStream input = file.getInputStream();
+            //使用uuid，的随机数生成基本上不重复的文件名称+文件后缀名-->组成新的文件达到修改文件名称的目的
+            newFileName = UUID.randomUUID() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
+
+            fout.write("------3---------".getBytes());
+            //获得客服端文件的原始名称
+            String outPath = uploadPath + "/" + newFileName;
+
+            fout.write("------4---------".getBytes());
+            OutputStream output = new FileOutputStream(outPath);
+            fout.write("------5---------".getBytes());
+            //缓冲区1m
+            byte[] buffer = new byte[1024];
+            while (input.read(buffer) > 0) {
+                output.write(buffer);
+            }
+            fout.write("------6---------".getBytes());
+            output.close();
+            input.close();
+        }catch (Exception e){
+            throw e;
+        }finally {
+            if(fout!=null)
+            fout.close();
         }
-        //创建输入流
-        InputStream input = file.getInputStream();
-        //使用uuid，的随机数生成基本上不重复的文件名称+文件后缀名-->组成新的文件达到修改文件名称的目的
-        String newFileName = UUID.randomUUID()+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
-        //获得客服端文件的原始名称
-        String outPath = uploadPath + "imgs/" + newFileName;
-        OutputStream output = new FileOutputStream(outPath);
-        //缓冲区1m
-        byte[] buffer = new byte[1024];
-        while (input.read(buffer) > 0) {
-            output.write(buffer);
-        }
-        output.close();
-        input.close();
         //返回相对路径
-        return "imgs/" + newFileName;
+        return "/imgs/" + newFileName;
 
     }
 

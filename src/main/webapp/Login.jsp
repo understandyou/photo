@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>登陆</title>
-    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
     <%-- bootstrap中的文件上传模块不知道为什么无法使用，每次打开页面会把页面变为一片空白
         这里改用layui的文件上传模块
      --%>
@@ -31,7 +31,7 @@
 <input type="hidden" id="userKeyBuffer" />
 <input type="hidden" id="userIdBuffer" />
     <div id="userLogin">
-        <form class="layui-form" action="/showPhoto.action" method="post">
+        <form class="layui-form" action="${pageContext.request.contextPath}/showPhoto.action" method="post">
             <div class="layui-form-item">
                 <label class="layui-form-label">您的姓名！</label>
                 <div class="layui-input-block">
@@ -56,7 +56,7 @@
         </form>
     </div>
 
-    <script src="js/layui/layui.all.js"></script>
+    <script src="${pageContext.request.contextPath}/js/layui/layui.all.js"></script>
     <script>
         //表单提交
         layui.use(['form','jquery'], function(){
@@ -68,7 +68,7 @@
                 //imageUpload();
                 layer.msg("玩命检索中...");
                 $.ajax({
-                    url: "/checkNameAutoority.action",
+                    url: "${pageContext.request.contextPath}/checkNameAutoority.action",
                     method: "POST",
                     //contentType:"application/json",//默认键值对，上传
                     dataType: "json",
@@ -122,7 +122,7 @@
                 //执行实例
                 var uploadInst = upload.render({
                     elem: '#test1' //绑定元素
-                    ,url: '/addImages.action' //上传接口
+                    ,url: '${pageContext.request.contextPath}/addImages.action' //上传接口
                     ,multiple: true//多选
                     ,data:{
                         "userKey":$("#userKeyBuffer").val(),
@@ -136,6 +136,8 @@
                     ,done: function(res){
                         //上传完毕回调
                         if(res.result=="ok"){
+                            console.log("路径："+res.lj);
+                            console.log(res);
                             //上传ok给出提示
                             msg("上传成功！手机端多张图片请分次上传！");
                             if($("#imgtz").val()==undefined){
@@ -175,7 +177,7 @@
             console.log("进入");
             //动态创建form，并且提交
             var decForm = $("<form></form>");
-            decForm.prop("action","/showPhoto.action");
+            decForm.prop("action","${pageContext.request.contextPath}/showPhoto.action");
             decForm.prop("method","post");
             var parVal = $("<input type='text' name='userKey' />");
             var parVal2 = $("<input type='text' name='userId' />");

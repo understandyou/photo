@@ -6,12 +6,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>相册</title>
-    <link rel="stylesheet" href="/css/xuehua.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/xuehua.css" type="text/css">
 </head>
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="../../js/xuehua.js"></script>
+  <script src="${pageContext.request.contextPath}/js/xuehua.js"></script>
    <style>
        html,body{
            width:100%;
@@ -22,7 +22,7 @@
            list-style:none;
        }
        body {
-           background-image: url("/imgs/background.jpg");
+           background-image: url("${pageContext.request.contextPath}/imgs/background.jpg");
            background-repeat:no-repeat;
            background-size: 100% 100%;
            overflow: hidden;
@@ -154,35 +154,35 @@
             }
             /* 记录 */
        <%-- 进入的时间 --%>
-            <%--$.ajax({--%>
-                <%--url:"/addLog.action",--%>
-                <%--method:"POST",--%>
-                <%--//contentType:"application/json; charset=utf-8",--%>
-                <%--data:{ "loginId": "${requestScope.userId}","first":"yes","userKey":"${requestScope.userKey}"}--%>
+            $.ajax({
+                url:"${pageContext.request.contextPath}/addLog.action",
+                method:"POST",
+                //contentType:"application/json; charset=utf-8",
+                data:{ "loginId": "${requestScope.userId}","first":"yes","userKey":"${requestScope.userKey}"}
 
-            <%--});--%>
+            });
             setInterval(function(){
                 var left=Math.random()*window.innerWidth;
                 var height=Math.random()*window.innerHeight;
-                var src = '/imgs/snow.png';
+                var src = '../../imgs/snow.png';
                 snowFlow(left,height,src);
             },100);
         });
-        <%--setInterval(function(){--%>
-            <%--/* 记录5s */--%>
-            <%--$.ajax({--%>
-                <%--url:"/addLog.action",--%>
-                <%--type:"POST",--%>
-                <%--async:false,//关闭异步，方便调试--%>
-                <%--data:{ "loginId": "${requestScope.userId}","first":"no","userKey":"${requestScope.userKey}"},--%>
-                <%--success:function(result){--%>
-                <%--},--%>
-                <%--error:function(err){--%>
-                    <%--console.log(err);--%>
-                <%--}--%>
-            <%--});--%>
+        setInterval(function(){
+            /* 记录5s */
+            $.ajax({
+                url:"${pageContext.request.contextPath}/addLog.action",
+                type:"POST",
+                async:false,//关闭异步，方便调试
+                data:{ "loginId": "${requestScope.userId}","first":"no","userKey":"${requestScope.userKey}"},
+                success:function(result){
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
 
-        <%--},5000);--%>
+        },5000);
         /* 检查是否支持某些属性 */
         var support_css3 = (function() {
 		 var div = document.createElement('div'),
