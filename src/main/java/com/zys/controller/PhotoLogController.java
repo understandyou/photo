@@ -69,16 +69,14 @@ public class PhotoLogController {
     @RequestMapping(value = "/addImages.action",method = RequestMethod.POST)
     public Map<String,Object> addImages(@RequestParam(value = "file") CommonsMultipartFile image, HttpServletRequest request) throws IOException {
         Map<String,Object> result = new HashMap<>();
-        FileOutputStream fout =new FileOutputStream("/usr/myFile/log.txt",true);
+        //FileOutputStream fout =new FileOutputStream("/usr/myFile/log.txt",true);
         try {
 
-            fout.write("------ttt1---------".getBytes());
             Integer userId = Integer.valueOf(request.getParameter("userId"));
             if(imageInfoService.getLoginIdByCount(userId)>=20){
                 result.put("result","exceed");
                 return result;
             }
-            fout.write("------ttt2---------".getBytes());
 
             //根据相对路径获得绝对路径
             //String url =  request.getServletContext().getRealPath("/imgs");
@@ -89,31 +87,20 @@ public class PhotoLogController {
                 //String realUploadPath = imgService.uploadImg(image, request.getServletContext().getRealPath("/"));
             //图片存放路径直接写定
                 String realUploadPath = imgService.uploadImg(image, "/tmp/images");
-            fout.write("------ttt3---------".getBytes());
                 ImageInfo imageInfo = new ImageInfo();
                 imageInfo.setLoginId(userId);
                 imageInfo.setImgUrl(realUploadPath);
-            fout.write("------ttt4---------".getBytes());
                 //将绝对路径保存到数据库
                 int imageSave = imageInfoService.addImageInfo(imageInfo);
-            fout.write("------ttt5---------".getBytes());
 
             //获取生成的缩略图的相对地址
             //String thumbImageUrl = imgService.imageController(image, realUploadPath);
             result.put("result", "ok");
 
         } catch (IOException e) {
-            fout.write("------ttt6---------".getBytes());
             e.printStackTrace();
             result.put("result","no");
             //fout = new FileOutputStream("/usr/myFile/log.txt",true);
-            fout.write(e.getMessage().getBytes());
-            fout.write("------ttt7---------".getBytes());
-        }
-        finally {
-            fout.write("------ttt8---------".getBytes());
-            if(fout!=null)
-            fout.close();
         }
         return result;
     }
