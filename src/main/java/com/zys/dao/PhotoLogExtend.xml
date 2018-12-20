@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zys.dao.PhotoLogExtend">
+<!-- 如果需要返回父类中的结果集加上父类xml的命名空间 例如：
+    <select id="xxxxx" resultMap="com.xxx.dao.mapper.TagMapper.BaseResultMap">  这里时原始命名空间加上结果集id
+</select>
+或者：
+<mapper namespace="com.xxx.dao.TagExtendMapper">
+   <resultMap id="ExtBaseResultMap" type="com.xxx.dao.Tag" extend="com.xxx.dao.mapper.TagMapper.BaseResultMap">
+       ...
+  </resultMap>
+</mapper>
+
+ -->
+
+    <update id="updateEndTimeByUserId" parameterType="com.zys.entitys.PhotoLog">
+UPDATE `photo_log` SET ent_date=#{entDate} WHERE id=#{id}
+    </update>
+</mapper>
