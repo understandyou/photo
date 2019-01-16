@@ -12,7 +12,14 @@
             <property name="suppressAllComments" value="false"/>
             <property name="suppressDate" value="true"/>
         </commentGenerator>
-
+        <!--
+                生成的Java文件的编码 
+                <property name="javaFileEncoding" value="UTF-8"/>
+                格式化java代码 
+                <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+                 格式化XML代码 
+                <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+        -->
         <!-- 数据库的相关配置 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://d" userId="" password=""/>
 
